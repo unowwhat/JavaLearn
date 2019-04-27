@@ -1,22 +1,35 @@
 public class MyThread implements Runnable {
+    Thread thrd;
+    volatile boolean suspended;
+    volatile boolean stopped;
 
-    String thrdName;
 
     MyThread(String name){
-        thrdName = name;
+        thrd = new Thread(this, name);
+        suspended = false;
+        stopped = false;
+        thrd.start();
     }
 
     public void run() {
-        System.out.println(thrdName + " starting...");
+        System.out.println(thrd + " starting...");
         try {
-            for (int count = 0; count <= 10; count++){
-                Thread.sleep(400);
-                System.out.println(thrdName + ": " + count);
+            for (int i = 0; i < 1000; i++){
+                System.out.print(i + " ");
+                if ((i%10)==0){
+                    System.out.println();
+                    thrd.sleep(250);
+                }
+                synchronized (this){
+                    while(suspended){
+                        wait();
+                    }
+                }
             }
         } catch (InterruptedException exc){
-            System.out.println(thrdName + " is broken, exception:" + exc);
+            System.out.println(thrd + " is broken, exception:" + exc);
         }
-        System.out.println(thrdName + " finished...");
+        System.out.println(thrd + " finished...");
     }
 
 }

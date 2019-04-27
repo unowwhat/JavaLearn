@@ -3,7 +3,6 @@ public class RunThreads {
         System.out.println("Стартуем основной поток программы...");
 
         MyThread thrd = new MyThread("Внутренний поток");
-        //thrd.run();
         Thread mythrd = new Thread(thrd);
         mythrd.start();
         System.out.println("Стартуем основной поток...");
